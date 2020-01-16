@@ -1,0 +1,113 @@
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>JQuery Plugin Select2 Combo Simples</title>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/select2.4.0.8.full.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="css/site.css">
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
+    <script src="js/popper_1.12.9.min.js"></script>
+    <script src="js/bootstrap/bootstrap.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-group">
+            <div class="col-6">
+                <select id="carros" class="form-control">
+                    <option value="1">Celta</option>
+                    <option value="2">HB20</option>
+                    <option value="3">Ford Ka</option>
+                    <option value="4">Sandero</option>
+                    <option value="5">Corolla</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col">
+                <li>1 - Celta</li>
+                <li>2 - HB20</li>
+                <li>3 - Ford Ka</li>
+                <li>4 - Sandero</li>
+                <li>5 - Corolla</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-auto">
+                Digite aqui o número do carro que deseja:
+            </div>
+            <div class="col-md-auto">
+                <input type="text" style="width: 50px;" maxlength="1" id="txtCarroEscolhido" class="form-control"/>
+            </div>
+            <div class="col-md-auto">
+                <button type="button" class="btn btn-primary" id="btn_HabilitarCarroEscolhido">Exibir</button>
+                <!--<input type="submit" value="Exibir" id="btn_HabilitarCarroEscolhido" class="btn btn-primary"/>-->
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col">
+                <p id="resultado"></p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        console.clear();
+
+        $('select#carros').select2({
+            //containerCssClass: '', //coloca alguma classe que deseja
+            placeholder: {
+                id: '-1', text: 'Selecione um carro'
+            }, allowClear: true
+        });
+
+    });
+
+    $("#carros").change(function () {
+        //itens que foram selecionados
+        var itensSelecionados = $('#carros').select2('data');
+    });
+
+    document.getElementById('btn_HabilitarCarroEscolhido').addEventListener('click', HabilitarCarroEscolhido, false);
+
+    function HabilitarCarroEscolhido() {
+
+        var carroEscolhido = document.getElementById('txtCarroEscolhido').value;
+
+        if (ValidarCarroEscolhido(carroEscolhido)) {
+
+        }
+        else {
+            console.log('não validou');
+        }
+        //ValidarCarroEscolhido
+
+        console.log(carroEscolhido);
+        //$('#carros').select2().val(valor);
+        //$('#carros').select2().trigger('change');
+
+        //var data = $('#carros').select2('data');
+        // $("p#resultado").text("O carro 'Volvo' será SEMPRE selecionado: " + data[0].text);
+    }
+
+    function ValidarCarroEscolhido(carroEscolhido) {
+
+        if (!isNaN(parseFloat(carroEscolhido)) && isFinite(carroEscolhido)) {
+            if (carroEscolhido > 0 && carroEscolhido < 6)
+                return true;
+        }
+        else
+            return false;
+    }
+
+
+</script>
