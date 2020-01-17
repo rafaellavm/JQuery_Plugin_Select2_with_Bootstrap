@@ -15,9 +15,18 @@
 
 <body>
     <div class="container">
-      
-        <div class="form-group">
-            <div class="col-6">
+        <div class="row">
+            <div class="col-md-6 mt-5" id="alerta">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    Digite somente números e de 1 a 5
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4  mb-2">
                 <select id="carros" class="form-control">
                     <option value="1">Celta</option>
                     <option value="2">HB20</option>
@@ -27,72 +36,92 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col">
-                <li>1 - Celta</li>
-                <li>2 - HB20</li>
-                <li>3 - Ford Ka</li>
-                <li>4 - Sandero</li>
-                <li>5 - Corolla</li>
+        <div class="row">
+            <div class="col-md-4 ">
+                <ul class="list-group mb-2">
+                    <li class="list-group-item list-group-item-secondary">1 - Celta</li>
+                    <li class="list-group-item list-group-item-success">2 - HB20</li>
+                    <li class="list-group-item list-group-item-danger">3 - Ford Ka</li>
+                    <li class="list-group-item list-group-item-warning">4 - Sandero</li>
+                    <li class="list-group-item list-group-item-info">5 - Corolla</li>
                 </ul>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-auto">
-                Digite aqui o número do carro que deseja:
-            </div>
-            <div class="col-md-auto">
-                <input type="text" style="width: 50px;" maxlength="1" id="txtCarroEscolhido" class="form-control" />
-            </div>
-            <div class="col-md-auto">
-                <button type="button" class="btn btn-primary" id="btn_HabilitarCarroEscolhido">Exibir</button>
-                <!--<input type="submit" value="Exibir" id="btn_HabilitarCarroEscolhido" class="btn btn-primary"/>-->
+            <div class="col">
+                <div class="btn-group mb-2" role="group" aria-label="Grupo de botoes">
+                    <button type="button" class="btn btn-primary" id="btn_MostarCarroEscolhido" data-toggle="collapse"
+                        data-target="#collapseMostrarCarroEscolhido" aria-expanded="false"
+                        aria-controls="collapseMostrarCarroEscolhido">Mostrar carro escolhido</button>
+                    <button type="button" class="btn btn-success" id="btn_HabilitarCarroEscolhido">Habilitar carro
+                        escolhido</button>
+                    <button type="button" class="btn btn-info" id="btn_LimparTudo">Limpar tudo</button>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col">
-                <p id="resultado"></p>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="collapse" id="collapseMostrarCarroEscolhido">
+                    <div class="card card-body">
+                        <p id="txtCarroEscolhido"> </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </body>
 
 </html>
-
 <script type="text/javascript">
 
     $(document).ready(function () {
         console.clear();
 
+        HabilitarOuDesativarAlert("none");
+
         $('select#carros').select2({
             //containerCssClass: '', //coloca alguma classe que deseja
             placeholder: {
                 id: '-1', text: 'Selecione um carro'
-            }, allowClear: true
-        });
-
-    });
-
-    $("#carros").change(function () {
-        //itens que foram selecionados
-        var itensSelecionados = $('#carros').select2('data');
+            },
+            allowClear: true,
+           //disabled: true
+        });     
     });
 
     document.getElementById('btn_HabilitarCarroEscolhido').addEventListener('click', HabilitarCarroEscolhido, false);
+    document.getElementById('btn_MostarCarroEscolhido').addEventListener('click', MostrarCarroEscolhido, false);
+
+    function MostrarCarroEscolhido() {
+
+        var texto = '';
+        document.querySelector('p#txtCarroEscolhido').innerHTML = '';
+        var carroSelecionado = $('#carros').select2('data');
+        var identificadorDoCarroSelecionado = carroSelecionado[0].id;
+        var nomeDoCarroSelecionado = carroSelecionado[0].text;
+
+        texto = document.querySelector('p#txtCarroEscolhido').innerHTML + 'O carro escolhido foi: <span class="font-weight-bold">' + identificadorDoCarroSelecionado + ' - ' + nomeDoCarroSelecionado + '</span>';
+        document.querySelector('p#txtCarroEscolhido').innerHTML = texto;
+    }
 
     function HabilitarCarroEscolhido() {
 
-        var carroEscolhido = document.getElementById('txtCarroEscolhido').value;
+        $('#collapseMostrarCarroEscolhido').collapse("hide");
+
+        /*var carroEscolhido = document.getElementById('txtCarroEscolhido').value;
 
         if (ValidarCarroEscolhido(carroEscolhido)) {
+            HabilitarOuDesativarAlert("none");
 
+            var carroSelecionado = $('#carros').select2('data');
+
+            document.querySelector('p#resultado').textContent = "O carro escolhido é: ";
         }
         else {
-            console.log('não validou');
-        }
-        //ValidarCarroEscolhido
+            HabilitarOuDesativarAlert("block");
+            document.querySelector('p#resultado').textContent = "";
+        }*/
 
-        console.log(carroEscolhido);
         //$('#carros').select2().val(valor);
         //$('#carros').select2().trigger('change');
 
@@ -109,6 +138,20 @@
         else
             return false;
     }
+
+    function HabilitarOuDesativarAlert(status) {
+
+        document.getElementById('alerta').style.display = status;
+    }
+
+    $('#alerta').on('closed.bs.alert', function () {
+        alert('fechou');
+    });
+
+    $("#carros").change(function () {
+        //itens que foram selecionados
+        var itensSelecionados = $('#carros').select2('data');
+    });
 
 
 </script>
