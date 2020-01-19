@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-md-6 mt-5" id="alerta">
                 <div class="alert alert-danger alert-dismissible" role="alert">
-                    Digite somente números e de 1 a 5
+                    <label></label>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -26,39 +26,53 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4  mb-2">
-                <select id="carros" class="form-control">
-                    <option value="1">Celta</option>
-                    <option value="2">HB20</option>
-                    <option value="3">Ford Ka</option>
-                    <option value="4">Sandero</option>
-                    <option value="5">Corolla</option>
-                </select>
+            <div class="col mt-2 mb-2">
+                Baseando-se pela lista abaixo, escolha alguma opção dos botões:
             </div>
         </div>
+
         <div class="row">
-            <div class="col-md-4 ">
-                <ul class="list-group mb-2">
-                    <li class="list-group-item list-group-item-secondary">1 - Celta</li>
-                    <li class="list-group-item list-group-item-success">2 - HB20</li>
-                    <li class="list-group-item list-group-item-danger">3 - Ford Ka</li>
-                    <li class="list-group-item list-group-item-warning">4 - Sandero</li>
-                    <li class="list-group-item list-group-item-info">5 - Corolla</li>
+            <div class="col-md-4 mb-2">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-secondary"><input type="checkbox"
+                            onclick="VerificarCheckSelecionado(this);" value="1">1 - Celta</li>
+                    <li class="list-group-item list-group-item-success"><input type="checkbox"
+                            onclick="VerificarCheckSelecionado(this);" value="2">2 - HB20</li>
+                    <li class="list-group-item list-group-item-danger"><input type="checkbox"
+                            onclick="VerificarCheckSelecionado(this);" value="3">3 - Ford Ka</li>
+                    <li class="list-group-item list-group-item-warning"><input type="checkbox"
+                            onclick="VerificarCheckSelecionado(this);" value="4">4 - Sandero</li>
+                    <li class="list-group-item list-group-item-info"><input type="checkbox"
+                            onclick="VerificarCheckSelecionado(this);" value="5">5 - Corolla</li>
                 </ul>
             </div>
         </div>
+
+        <div id="form-control">
+            <div class="col-md-4 mb-2">
+                <select id="carros" class="form-control">
+                    <option value="1">1 - Celta</option>
+                    <option value="2">2 - HB20</option>
+                    <option value="3">3 - Ford Ka</option>
+                    <option value="4">4 - Sandero</option>
+                    <option value="5">5 - Corolla</option>
+                </select>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col">
                 <div class="btn-group mb-2" role="group" aria-label="Grupo de botoes">
                     <button type="button" class="btn btn-primary" id="btn_MostarCarroEscolhido" data-toggle="collapse"
                         data-target="#collapseMostrarCarroEscolhido" aria-expanded="false"
-                        aria-controls="collapseMostrarCarroEscolhido">Mostrar carro escolhido</button>
-                    <button type="button" class="btn btn-success" id="btn_HabilitarCarroEscolhido">Habilitar carro
-                        escolhido</button>
+                        aria-controls="collapseMostrarCarroEscolhido">Mostrar carro escolhido no dropdown</button>
+                    <button type="button" class="btn btn-success" id="btn_HabilitarCarroEscolhido">Habilitar o carro
+                        escolhido na lista colorida no dropdown</button>
                     <button type="button" class="btn btn-info" id="btn_LimparTudo">Limpar tudo</button>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-6">
                 <div class="collapse" id="collapseMostrarCarroEscolhido">
@@ -77,7 +91,7 @@
     $(document).ready(function () {
         console.clear();
 
-        HabilitarOuDesativarAlert("none");
+        HabilitarOuDesativarAlert("none", "");
 
         $('select#carros').select2({
             //containerCssClass: '', //coloca alguma classe que deseja
@@ -85,14 +99,28 @@
                 id: '-1', text: 'Selecione um carro'
             },
             allowClear: true,
-           //disabled: true
-        });     
+            //disabled: true
+        });
     });
 
     document.getElementById('btn_HabilitarCarroEscolhido').addEventListener('click', HabilitarCarroEscolhido, false);
     document.getElementById('btn_MostarCarroEscolhido').addEventListener('click', MostrarCarroEscolhido, false);
 
+    function VerificarCheckSelecionado(checkbox) {
+
+        HabilitarOuDesativarAlert("none", "");
+        var todosOsChecks = document.querySelectorAll('li input[type="checkbox"]');
+
+        for (var check = 0; check <= todosOsChecks.length - 1; check++) {
+            if (todosOsChecks[check].value != checkbox.value) {
+                todosOsChecks[check].checked = false;
+            }
+        }
+    }
+
     function MostrarCarroEscolhido() {
+
+        HabilitarOuDesativarAlert("none", "");
 
         var texto = '';
         document.querySelector('p#txtCarroEscolhido').innerHTML = '';
@@ -100,7 +128,7 @@
         var identificadorDoCarroSelecionado = carroSelecionado[0].id;
         var nomeDoCarroSelecionado = carroSelecionado[0].text;
 
-        texto = document.querySelector('p#txtCarroEscolhido').innerHTML + 'O carro escolhido foi: <span class="font-weight-bold">' + identificadorDoCarroSelecionado + ' - ' + nomeDoCarroSelecionado + '</span>';
+        texto = document.querySelector('p#txtCarroEscolhido').innerHTML + 'O carro escolhido foi no dropdown foi: <span class="font-weight-bold">' + nomeDoCarroSelecionado + '</span>';
         document.querySelector('p#txtCarroEscolhido').innerHTML = texto;
     }
 
@@ -108,25 +136,15 @@
 
         $('#collapseMostrarCarroEscolhido').collapse("hide");
 
-        /*var carroEscolhido = document.getElementById('txtCarroEscolhido').value;
+        var checkCarroEscolhido = document.querySelector('input[type="checkbox"]:checked');
 
-        if (ValidarCarroEscolhido(carroEscolhido)) {
-            HabilitarOuDesativarAlert("none");
-
-            var carroSelecionado = $('#carros').select2('data');
-
-            document.querySelector('p#resultado').textContent = "O carro escolhido é: ";
+        if (checkCarroEscolhido != null) {
+            $('#carros').select2().val(checkCarroEscolhido.value);
+            $('#carros').select2().trigger('change');
         }
         else {
-            HabilitarOuDesativarAlert("block");
-            document.querySelector('p#resultado').textContent = "";
-        }*/
-
-        //$('#carros').select2().val(valor);
-        //$('#carros').select2().trigger('change');
-
-        //var data = $('#carros').select2('data');
-        // $("p#resultado").text("O carro 'Volvo' será SEMPRE selecionado: " + data[0].text);
+            HabilitarOuDesativarAlert("block", "Escolha algum item da lista colorida!");
+        }
     }
 
     function ValidarCarroEscolhido(carroEscolhido) {
@@ -139,9 +157,13 @@
             return false;
     }
 
-    function HabilitarOuDesativarAlert(status) {
+    function HabilitarOuDesativarAlert(status,mensagem) {
 
-        document.getElementById('alerta').style.display = status;
+        var divAlerta =  document.getElementById('alerta');
+        divAlerta.style.display = status;
+
+        var label = divAlerta.querySelector('label');
+        label.textContent = mensagem;     
     }
 
     $('#alerta').on('closed.bs.alert', function () {
